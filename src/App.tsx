@@ -1,35 +1,45 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Movie, Reaction } from './types/movie'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [movies, setMovies] = useState<Movie[]>([])
+  const [showWatched, setShowWatched] = useState<boolean>(false)
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  const addMovie = (name: string) => {
+    const newMovie: Movie = {
+      id: Date.now(),
+      name,
+      watched: false,
+      reaction: null
+    }
+
+    setMovies(prev => [...prev, newMovie])
+  }
+
+  const deleteMovie = (id: number) => {
+    setMovies(prev => prev.filter(movie => movie.id !== id))
+  }
+
+  const toggleWatched = (id: number) => {
+    setMovies(prev =>
+      prev.map(movie =>
+        movie.id === id
+          ? { ...movie, watched: !movie.watched, reaction: null }
+          : movie
+      )
+    )
+  }
+
+  const setReaction = (id: number, value: Reaction) => {
+    setMovies(prev =>
+      prev.map(movie =>
+        movie.id === id ? { ...movie, reaction: value } : movie
+      )
+    )
+  }
+
+  return <div className="container"></div>
 }
 
 export default App
